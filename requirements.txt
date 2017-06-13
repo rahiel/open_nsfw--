@@ -1,0 +1,4 @@
+aiodns
+aiohttp
+cchardet
+uvloop

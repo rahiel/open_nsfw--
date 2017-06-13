@@ -1,7 +1,7 @@
 """
 Copyright 2016 Yahoo Inc.
 Licensed under the terms of the 2 clause BSD license.
-Please see LICENSE.txt in the project root for the terms.
+Please see LICENSE-yahoo.txt in the project root for the terms.
 """
 
 import argparse
@@ -13,13 +13,13 @@ import numpy as np
 from PIL import Image
 
 
-def resize_image(img_data, sz=(256, 256)):
+def resize_image(img_data, size=(256, 256)):
     """
     Resize image. Please use this resize logic for best results, as it was used
     to generate the training dataset.
     :param bytes data:
         The image data
-    :param sz tuple:
+    :param size tuple:
         The resized image dimensions
     :returns bytearray:
         A byte array with the resized image
@@ -27,7 +27,7 @@ def resize_image(img_data, sz=(256, 256)):
     im = Image.open(BytesIO(img_data))
     if im.mode != "RGB":
         im = im.convert("RGB")
-    imr = im.resize(sz, resample=Image.BILINEAR)
+    imr = im.resize(size, resample=Image.BILINEAR)
     fh_im = BytesIO()
     imr.save(fh_im, format="JPEG")
     fh_im.seek(0)
@@ -54,7 +54,7 @@ def caffe_preprocess_and_compute(pimg, caffe_transformer=None, caffe_net=None, o
         if output_layers is None:
             output_layers = caffe_net.outputs
 
-        img_data_rs = resize_image(pimg, sz=(256, 256))
+        img_data_rs = resize_image(pimg, size=(256, 256))
         image = caffe.io.load_image(BytesIO(img_data_rs))
 
         H, W, _ = image.shape
@@ -74,6 +74,24 @@ def caffe_preprocess_and_compute(pimg, caffe_transformer=None, caffe_net=None, o
     else:
         return []
 
+def load_model(model_def=None, pretrained_model=None):
+    if model_def is None:
+        model_def = "nsfw_model/deploy.prototxt"
+    if pretrained_model is None:
+        pretrained_model = "nsfw_model/resnet_50_1by2_nsfw.caffemodel"
+
+    # Pre-load caffe model.
+    nsfw_net = caffe.Net(model_def, pretrained_model, caffe.TEST)
+
+    # Load transformer
+    # Note that the parameters are hard-coded for best results
+    caffe_transformer = caffe.io.Transformer({"data": nsfw_net.blobs["data"].data.shape})
+    caffe_transformer.set_transpose("data", (2, 0, 1))             # move image channels to outermost
+    caffe_transformer.set_mean("data", np.array([104, 117, 123]))  # subtract the dataset-mean value in each channel
+    caffe_transformer.set_raw_scale("data", 255)                   # rescale from [0, 1] to [0, 255]
+    caffe_transformer.set_channel_swap("data", (2, 1, 0))          # swap channels from RGB to BGR
+
+    return nsfw_net, caffe_transformer
 
 def main(argv):
     parser = argparse.ArgumentParser()
@@ -86,35 +104,25 @@ def main(argv):
     # Optional arguments.
     parser.add_argument(
         "--model_def",
-        help="Model definition file.",
-        default="nsfw_model/deploy.prototxt"
+        help="Model definition file."
     )
     parser.add_argument(
         "--pretrained_model",
-        help="Trained model weights file.",
-        default="nsfw_model/resnet_50_1by2_nsfw.caffemodel"
+        help="Trained model weights file."
     )
 
     args = parser.parse_args()
-    image_data = open(args.input_file, "rb").read()
 
-    # Pre-load caffe model.
-    nsfw_net = caffe.Net(args.model_def, args.pretrained_model, caffe.TEST)
-
-    # Load transformer
-    # Note that the parameters are hard-coded for best results
-    caffe_transformer = caffe.io.Transformer({"data": nsfw_net.blobs["data"].data.shape})
-    caffe_transformer.set_transpose("data", (2, 0, 1))             # move image channels to outermost
-    caffe_transformer.set_mean("data", np.array([104, 117, 123]))  # subtract the dataset-mean value in each channel
-    caffe_transformer.set_raw_scale("data", 255)                   # rescale from [0, 1] to [0, 255]
-    caffe_transformer.set_channel_swap("data", (2, 1, 0))          # swap channels from RGB to BGR
+    nsfw_net, caffe_transformer = load_model(args.model_def, args.pretrained_model)
+    image = open(args.input_file, "rb").read()
 
     # Classify.
-    scores = caffe_preprocess_and_compute(image_data, caffe_transformer=caffe_transformer, caffe_net=nsfw_net, output_layers=["prob"])
-
+    scores = caffe_preprocess_and_compute(image, caffe_transformer=caffe_transformer, caffe_net=nsfw_net, output_layers=["prob"])
     # Scores is the array containing SFW / NSFW image probabilities
     # scores[1] indicates the NSFW probability
-    print("NSFW score: {}".format(scores[1]))
+
+    nsfw_prob = scores[1]
+    print("NSFW score: {}".format(nsfw_prob.astype(str)))
 
 
 if __name__ == "__main__":
