@@ -37,5 +37,5 @@ class API(web.View):
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())
 session = aiohttp.ClientSession()
 app = web.Application()
-app.router.add_route("*", "/api", API)
+app.router.add_route("*", "/", API)
 web.run_app(app)
