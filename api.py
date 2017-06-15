@@ -5,6 +5,7 @@ import async_timeout
 import numpy as np
 import uvloop
 from aiohttp import web
+from aiohttp.web import HTTPBadRequest, HTTPUnsupportedMediaType
 
 from classify_nsfw import caffe_preprocess_and_compute, load_model
 
@@ -30,8 +31,13 @@ class API(web.View):
             nsfw_prob = classify(image)
             text = nsfw_prob.astype(str)
             return web.Response(text=text)
-        except:
-            raise web.HTTPBadRequest()
+        except KeyError:
+            return HTTPBadRequest(text="Missing `url` POST parameter")
+        except OSError as e:
+            if "cannot identify" in str(e):
+                raise HTTPUnsupportedMediaType(text="Invalid image")
+            else:
+                raise e
 
 
 asyncio.set_event_loop_policy(uvloop.EventLoopPolicy())

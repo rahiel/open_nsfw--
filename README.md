@@ -49,3 +49,13 @@ import requests
 r = requests.post("http://localhost:8080", data={"url": "http://example.com/image.jpg"})
 nsfw_prob = float(r.text)
 ```
+
+# HTTP Errors
+
+## 415 Unsupported Media Type: Invalid image
+
+The requested `url` is not a valid image.
+
+## 400 Bad Request: Missing `url` POST parameter
+
+You need to specify `url` as a POST parameter.
