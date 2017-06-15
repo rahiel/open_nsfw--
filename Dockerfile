@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /opt/open_nsfw--
 
 RUN git clone https://github.com/rahiel/open_nsfw--.git /opt/open_nsfw-- \
- && git checkout 50b44ecf8e3bdc504d4385191babf9e1a529a423
+ && git checkout 3f439d0b85dc92cb2c05f80337f7537daaa3009c
 
 RUN pip3 install -r requirements.txt
 
