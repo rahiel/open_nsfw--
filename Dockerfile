@@ -21,4 +21,8 @@ RUN pip3 install -r requirements.txt
 
 EXPOSE 8080
 
+RUN groupadd -r open_nsfw && useradd --no-log-init -r -g open_nsfw open_nsfw
+
+USER open_nsfw
+
 ENTRYPOINT ["python3", "api.py"]
