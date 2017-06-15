@@ -4,13 +4,21 @@ This is a fork of Yahoo's [open_nsfw][]. The goal is to make the *Not Suitable
 for Work* (NSFW) classification model easily accessible through an HTTP API
 deployable with Docker.
 
-[Install Docker][docker] (available in Debian as [docker.io][dpkg]) and build
-the image, this might take a while:
+# Install
+
+First [install Docker][docker] (available in Debian as [docker.io][dpkg]), then
+give the user you want to run the API as permission to use Docker:
+``` shell
+sudo gpasswd -a $USER docker
+```
+You need to logout and login again for this to take effect.
+
+Now build the image, this might take a while:
 ``` shell
 docker build -t open_nsfw https://raw.githubusercontent.com/rahiel/open_nsfw--/master/Dockerfile
 ```
 
-Then you can start the API: 
+Then you can start the API:
 ``` shell
 docker run -p <port>:8080 open_nsfw
 ```
