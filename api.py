@@ -5,7 +5,7 @@ import async_timeout
 import numpy as np
 import uvloop
 from aiohttp import web
-from aiohttp.web import HTTPBadRequest, HTTPUnsupportedMediaType
+from aiohttp.web import HTTPBadRequest, HTTPNotFound, HTTPUnsupportedMediaType
 
 from classify_nsfw import caffe_preprocess_and_compute, load_model
 
@@ -20,6 +20,8 @@ def classify(image: bytes) -> np.float64:
 async def fetch(session, url):
     with async_timeout.timeout(10):
         async with session.get(url) as response:
+            if response.status == 404:
+                raise HTTPNotFound()
             return await response.read()
 
 class API(web.View):

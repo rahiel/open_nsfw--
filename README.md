@@ -52,10 +52,14 @@ nsfw_prob = float(r.text)
 
 # HTTP Errors
 
-## 415 Unsupported Media Type: Invalid image
-
-The requested `url` is not a valid image.
-
 ## 400 Bad Request: Missing `url` POST parameter
 
 You need to specify `url` as a POST parameter.
+
+## 404 Not Found
+
+The requested `url` leads to an HTTP 404 Not Found error.
+
+## 415 Unsupported Media Type: Invalid image
+
+The requested `url` is not a valid image.
