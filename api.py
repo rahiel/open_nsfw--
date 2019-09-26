@@ -29,12 +29,18 @@ class API(web.View):
         request = self.request
         data = await request.post()
         try:
-            image = await fetch(session, data["url"])
+            if data.get('url'):
+                image = await fetch(session, data["url"])
+            elif data.get('file'):
+                pass
+            else:
+                raise KeyError()
             nsfw_prob = classify(image)
             text = nsfw_prob.astype(str)
             return web.Response(text=text)
         except KeyError:
-            return HTTPBadRequest(text="Missing `url` POST parameter")
+            error_text = "Missing `url` or `file` POST parameter"
+            return HTTPBadRequest(text=error_text)
         except OSError as e:
             if "cannot identify" in str(e):
                 raise HTTPUnsupportedMediaType(text="Invalid image")
