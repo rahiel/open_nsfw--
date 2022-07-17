@@ -9,8 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-numpy \
     python3-pip \
     python3-setuptools \
-    python3-wheel \
- && rm -rf /var/lib/apt/lists/*
+    python3-wheel && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/open_nsfw--
 
