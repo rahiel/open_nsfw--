@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 WORKDIR /opt/open_nsfw_2022
 
 RUN git clone https://github.com/cooperdk/open_nsfw_2022.git /opt/open_nsfw_2022 \
- && git checkout 92b1331931db96f186b32571786f6732353b624f
+ && git checkout ace6c75bec551e4fc71638b4408c911d3fb1a9bf
 
 RUN pip3 install -r requirements.txt
 
