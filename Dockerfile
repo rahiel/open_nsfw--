@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-wheel \
     libffi-dev \
     libssl-dev \
-    openssl
+    openssl \
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/open_nsfw_2022
