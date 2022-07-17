@@ -4,6 +4,8 @@ This is a fork of Yahoo's [open_nsfw][]. The goal is to make the *Not Suitable
 for Work* (NSFW) classification model easily accessible through an HTTP API
 deployable with Docker.
 
+Now based on Debian 10 Buster and Python 3.7.3, since the old Stretch-based build crashed due to an incompatible dependency (CFFI).
+
 # Install
 
 First [install Docker][docker] (available in Debian as [docker.io][dpkg]), then
