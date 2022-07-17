@@ -18,7 +18,7 @@ def classify(image: bytes) -> np.float64:
     return scores[1]
 
 async def fetch(session, url):
-    with async_timeout.timeout(10):
+    async with timeout(10):
         async with session.get(url) as response:
             if response.status == 404:
                 raise HTTPNotFound()
