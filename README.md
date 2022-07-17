@@ -1,4 +1,4 @@
-# open_nsfw--
+# open_nsfw_2022
 
 This is a fork of Yahoo's [open_nsfw][]. The goal is to make the *Not Suitable
 for Work* (NSFW) classification model easily accessible through an HTTP API
