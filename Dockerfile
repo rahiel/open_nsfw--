@@ -1,4 +1,4 @@
-FROM debian:stretch-slim
+FROM debian:buster-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python3-setuptools \
     python3-wheel \
+    libffi-dev \
+    libssl-dev \
+    openssl
  && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /opt/open_nsfw_2022
