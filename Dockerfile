@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-wheel \
  && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/open_nsfw--
+WORKDIR /opt/open_nsfw_2022
 
 RUN git clone https://github.com/cooperdk/open_nsfw_2022.git /opt/open_nsfw_2022 \
  && git checkout 3ae998c59b05b3ab271d7cc2a555c55d62a327d7
