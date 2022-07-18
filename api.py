@@ -1,8 +1,8 @@
 import asyncio
 
 import aiohttp
-# import async_timeout
-import async-timeout
+from async_timeout import timeout
+
 import numpy as np
 import uvloop
 from aiohttp import web
