@@ -19,10 +19,13 @@ def classify(image: bytes) -> np.float64:
 
 async def fetch(session, url):
     #async with timeout(10):
-    async with session.get(url, allow_redirects=True, timeout=10) as response:
-        if response.status == 404:
-            raise HTTPNotFound()
-        return await response.read()
+    try:
+        async with session.get(url, allow_redirects=True, timeout=10) as response:
+            if response.status == 404:
+                raise HTTPNotFound()
+            return await response.read()
+    except:
+        print("Error.")
 
 class API(web.View):
     async def post(self):
