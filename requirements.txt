@@ -1,5 +1,4 @@
 aiodns
 aiohttp
-async-timeout
 cchardet
 uvloop
