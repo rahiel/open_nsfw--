@@ -1,7 +1,7 @@
 import asyncio
 
 import aiohttp
-from async_timeout import timeout
+import async_timeout
 import numpy as np
 import uvloop
 from aiohttp import web
@@ -18,15 +18,11 @@ def classify(image: bytes) -> np.float64:
     return scores[1]
 
 async def fetch(session, url):
-    #async with timeout(10):
-    try:
-        async with timeout(10):
-            async with session.get(url) as response:
-                if response.status == 404:
-                    raise HTTPNotFound()
-                return await response.read()
-    except:
-        print("Error.")
+    with async_timeout.timeout(10):
+        async with session.get(url) as response:
+            if response.status == 404:
+                raise HTTPNotFound()
+            return await response.read()
 
 class API(web.View):
     async def post(self):
