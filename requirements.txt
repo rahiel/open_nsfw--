@@ -1,4 +1,4 @@
-aiodns
-aiohttp
-cchardet
-uvloop
+aiodns==1.2.0
+aiohttp==3.0.0
+cchardet==4.0.0
+uvloop==0.14.0
