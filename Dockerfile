@@ -9,13 +9,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-numpy \
     python3-pip \
     python3-setuptools \
-    python3-wheel \
+    openssl \
+    libffi-dev \
+    libssl-dev \
+    python3-wheel \ 
  && rm -rf /var/lib/apt/lists/*
 
-WORKDIR /opt/open_nsfw--
+WORKDIR /opt/open_nsfw_2022
 
-RUN git clone https://github.com/rahiel/open_nsfw--.git /opt/open_nsfw-- \
- && git checkout 52c4aea5b5ca43fb8fa16fb5c446c40cf6711b1e
+RUN git clone https://github.com/cooperdk/open_nsfw_2022.git /opt/open_nsfw_2022 \
+ && git checkout master
 
 RUN pip3 install -r requirements.txt
 

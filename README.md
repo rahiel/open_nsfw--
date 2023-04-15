@@ -1,8 +1,10 @@
-# open_nsfw--
+# open_nsfw_2022
 
 This is a fork of Yahoo's [open_nsfw][]. The goal is to make the *Not Suitable
 for Work* (NSFW) classification model easily accessible through an HTTP API
 deployable with Docker.
+
+As I couldn't make this work on Buster due to insufficient knowledge of the tread system, I have edited the requirements to support Python 3.5.
 
 # Install
 
