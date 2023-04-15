@@ -1,4 +1,6 @@
-aiodns
-aiohttp
-cchardet
-uvloop
+pycares==2.2.0
+cffi==1.10.0
+aiodns==1.1.1
+aiohttp==3.0.5
+cchardet==2.1.6
+uvloop==0.14.0
